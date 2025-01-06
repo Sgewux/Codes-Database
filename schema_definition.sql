@@ -47,7 +47,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS JUDGE_DB.PROBLEM (
-  id INT NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
   statement TEXT NOT NULL,
   editorial TEXT NULL,
@@ -84,18 +84,18 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS JUDGE_DB.SUBMISSION (
-  id INT NOT NULL,
-  status ENUM('QU', 'AC', 'WA', 'TL', 'RT') NOT NULL DEFAULT 'QU',
+  id INT NOT NULL AUTO_INCREMENT,
+  status ENUM('QU', 'AC', 'WA', 'TL', 'RT', 'CE') NOT NULL DEFAULT 'QU',
   execution_time_seconds DECIMAL(4,3) NOT NULL,
   date DATETIME NOT NULL,
   code TEXT NOT NULL,
-  Problem_id INT NOT NULL,
+  problem_id INT NOT NULL,
   contestant_handle VARCHAR(20) NOT NULL,
   PRIMARY KEY (id),
-  INDEX fk_Submission_Problem1_idx (Problem_id ASC) VISIBLE,
+  INDEX fk_Submission_Problem1_idx (problem_id ASC) VISIBLE,
   INDEX fk_SUBMISSION_CONTESTANT1_idx (contestant_handle ASC) VISIBLE,
   CONSTRAINT fk_Submission_Problem1
-    FOREIGN KEY (Problem_id)
+    FOREIGN KEY (problem_id)
     REFERENCES JUDGE_DB.PROBLEM (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
