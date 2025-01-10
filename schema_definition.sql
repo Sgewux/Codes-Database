@@ -171,3 +171,11 @@ DROP USER IF EXISTS 'application'@'localhost';
 CREATE USER 'application'@'localhost' IDENTIFIED BY 'password';
 
 GRANT ALL ON  JUDGE_DB.* TO 'application'@'localhost';
+
+SELECT * FROM JUDGE_DB.PROBLEM;
+
+
+
+
+
+
