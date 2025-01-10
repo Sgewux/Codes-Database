@@ -54,6 +54,7 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 		END IF;
 	END $$
 DELIMITER ;
+<<<<<<< HEAD
 
 
 
@@ -93,3 +94,5 @@ DELIMITER ;
 
 CALL get_User_submissions(45);
 
+=======
+>>>>>>> 22f02a762a8a2f5295973b38aa52c4f99315612c
