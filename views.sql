@@ -13,7 +13,7 @@ CREATE VIEW vw_submission_activity
     (SELECT contestant_handle, DATE(submission.date) AS date, COUNT(*) AS number_of_submissions
 	FROM submission
     GROUP BY contestant_handle, DATE(submission.date)
-	ORDER BY DATE(submission.date) DESC);
+	ORDER BY DATE(submission.date) ASC);
     
 
 -- ----------------------------------------------------------

@@ -54,3 +54,11 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 		END IF;
 	END $$
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS query_submission_activity;
+DELIMITER $$
+CREATE PROCEDURE query_submission_activity(handle VARCHAR(20))
+	BEGIN
+		SELECT * FROM vw_submission_activity WHERE contestant_handle = handle;
+    END $$
+DELIMITER ;
