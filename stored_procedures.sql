@@ -55,6 +55,41 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	END $$
 DELIMITER ;
 
+-- -----------------------------------------------------
+-- get AC user submissions
+-- -----------------------------------------------------
+
+--
+DROP PROCEDURE IF EXISTS get_User_AC_sumbissions;
+DELIMITER $$
+CREATE PROCEDURE get_User_AC_sumbissions(IN problemId INT)
+BEGIN
+    SELECT *
+    FROM vw_user_ac_submissions
+    WHERE problem_id = problemId;
+END$$
+DELIMITER ;
+
+CALL get_User_AC_sumbissions(45);
+
+
+
+-- -----------------------------------------------------
+-- get All User submissions
+-- -----------------------------------------------------
+
+--
+DROP PROCEDURE IF EXISTS get_User_submissions;
+DELIMITER $$
+CREATE PROCEDURE get_User_submissions(IN problemId INT)
+BEGIN
+    SELECT *
+    FROM vw_user_submissions
+    WHERE problem_id = problemId;
+END$$
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS query_submission_activity;
 DELIMITER $$
 CREATE PROCEDURE query_submission_activity(handle VARCHAR(20))

@@ -29,3 +29,75 @@ CREATE VIEW vw_problem_times_solved
 	INNER JOIN submission ON (problem.id = submission.problem_id)
     WHERE submission.status = 'AC'
     GROUP BY problem.id);
+    
+    
+    
+-- ----------------------------------------------------------
+-- -------------------- vw_problem_details ------------------
+-- Shows all the information necesary for the problems page 
+-- (All problems).
+-- In cases where there is no status, it will return null.
+-- ----------------------------------------------------------
+
+--
+DROP VIEW IF EXISTS vw_problem_details;
+CREATE VIEW vw_problem_details AS
+SELECT p.id, p.name, p.problemsetter_handle, p.editorial, 
+	COALESCE(
+		(SELECT s.status FROM JUDGE_DB.SUBMISSION s  WHERE s.problem_id = p.id AND s.status = 'AC' ORDER BY s.id DESC LIMIT 1),
+		(SELECT s.status FROM JUDGE_DB.SUBMISSION s WHERE s.problem_id = p.id ORDER BY s.id DESC LIMIT 1)
+	) AS status, 
+    
+	(SELECT COUNT(*) FROM JUDGE_DB.SUBMISSION s WHERE s.problem_id = p.id AND s.status = 'AC'
+	) AS times_solved
+FROM JUDGE_DB.PROBLEM p;
+
+
+
+-- -----------------------------------------------------------
+-- ---------------- vw_user_ac_submissions -------------------
+-- Shows all the information necesary for the problems page
+-- (Acepted)
+-- -----------------------------------------------------------
+
+--
+DROP VIEW IF EXISTS vw_user_ac_submissions;
+CREATE VIEW vw_user_ac_submissions AS
+SELECT 
+    s.problem_id, 
+    s.id AS submission_id, 
+    s.code, 
+    s.execution_time_seconds, 
+    s.date, 
+    s.status, 
+    s.contestant_handle
+FROM JUDGE_DB.SUBMISSION s
+WHERE s.status = 'AC';
+
+
+
+-- -----------------------------------------------------------------
+-- ---------------- vw_user_submissions -----------------------------
+-- Shows all the information necesary for the problems page 
+-- (tried)
+-- -----------------------------------------------------------------
+
+--
+DROP VIEW IF EXISTS vw_user_submissions;
+CREATE VIEW vw_user_submissions AS
+SELECT 
+    s.problem_id, 
+    s.id AS submission_id, 
+    s.code, 
+    s.execution_time_seconds, 
+    s.date, 
+    s.status, 
+    s.contestant_handle
+FROM JUDGE_DB.SUBMISSION s
+WHERE s.status IS NOT NULL;
+
+
+
+
+
+
