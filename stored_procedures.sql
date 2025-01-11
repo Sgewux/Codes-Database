@@ -35,7 +35,7 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 -- 
-DROP PROCEDURE IF EXISTS find_user_by_id;
+DROP PROCEDURE IF EXISTS find_user_by_handle;
 DELIMITER $$
 CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	BEGIN
@@ -70,8 +70,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL get_User_AC_sumbissions(45);
-
 
 
 -- -----------------------------------------------------
@@ -92,8 +90,19 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS query_submission_activity;
 DELIMITER $$
-CREATE PROCEDURE query_submission_activity(handle VARCHAR(20))
+CREATE PROCEDURE query_submission_activity(handle VARCHAR(20), from_d DATE, to_d DATE)
 	BEGIN
-		SELECT * FROM vw_submission_activity WHERE contestant_handle = handle;
+		SELECT * FROM vw_submission_activity 
+        WHERE contestant_handle = handle AND vw_submission_activity.date >= from_d AND vw_submission_activity.date <= to_d 
+        ;
+    END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS query_problem_details_for_user;
+DELIMITER $$
+CREATE PROCEDURE query_problem_details_for_user(handle VARCHAR(20))
+	BEGIN
+		SELECT id, name, problemsetter_handle, editorial, times_solved, get_problem_status(id, handle) AS status
+        FROM vw_problem_details;
     END $$
 DELIMITER ;

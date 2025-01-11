@@ -42,15 +42,9 @@ CREATE VIEW vw_problem_times_solved
 --
 DROP VIEW IF EXISTS vw_problem_details;
 CREATE VIEW vw_problem_details AS
-SELECT p.id, p.name, p.problemsetter_handle, p.editorial, 
-	COALESCE(
-		(SELECT s.status FROM JUDGE_DB.SUBMISSION s  WHERE s.problem_id = p.id AND s.status = 'AC' ORDER BY s.id DESC LIMIT 1),
-		(SELECT s.status FROM JUDGE_DB.SUBMISSION s WHERE s.problem_id = p.id ORDER BY s.id DESC LIMIT 1)
-	) AS status, 
-    
-	(SELECT COUNT(*) FROM JUDGE_DB.SUBMISSION s WHERE s.problem_id = p.id AND s.status = 'AC'
-	) AS times_solved
-FROM JUDGE_DB.PROBLEM p;
+SELECT p.id, p.name, p.problemsetter_handle, p.editorial, IFNULL(times_solved, 0) AS times_solved
+	FROM JUDGE_DB.PROBLEM p
+    LEFT JOIN vw_problem_times_solved ON p.id = vw_problem_times_solved.id;
 
 
 
