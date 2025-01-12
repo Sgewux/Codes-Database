@@ -36,13 +36,12 @@ CREATE VIEW vw_problem_times_solved
 -- -------------------- vw_problem_details ------------------
 -- Shows all the information necesary for the problems page 
 -- (All problems).
--- In cases where there is no status, it will return null.
 -- ----------------------------------------------------------
 
 --
 DROP VIEW IF EXISTS vw_problem_details;
 CREATE VIEW vw_problem_details AS
-SELECT p.id, p.name, p.problemsetter_handle, p.editorial, IFNULL(times_solved, 0) AS times_solved
+SELECT p.id, p.name, p.problemsetter_handle AS author, p.editorial, IFNULL(times_solved, 0) AS times_solved
 	FROM JUDGE_DB.PROBLEM p
     LEFT JOIN vw_problem_times_solved ON p.id = vw_problem_times_solved.id;
 
