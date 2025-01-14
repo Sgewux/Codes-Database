@@ -101,19 +101,19 @@ BEGIN
     DECLARE roles_list TEXT DEFAULT '';
 
     IF EXISTS (SELECT 1 FROM JUDGE_DB.ADMIN WHERE handle = user_handle) THEN
-        SET roles_list = CONCAT(roles_list, 'ADMIN, ');
+        SET roles_list = CONCAT(roles_list, 'ADMIN ');
     END IF;
 
     IF EXISTS (SELECT 1 FROM JUDGE_DB.CONTESTANT WHERE handle = user_handle) THEN
-        SET roles_list = CONCAT(roles_list, 'CONTESTANT, ');
+        SET roles_list = CONCAT(roles_list, 'CONTESTANT ');
     END IF;
 
     IF EXISTS (SELECT 1 FROM JUDGE_DB.PROBLEMSETTER WHERE handle = user_handle) THEN
-        SET roles_list = CONCAT(roles_list, 'PROBLEMSETTER, ');
+        SET roles_list = CONCAT(roles_list, 'PROBLEMSETTER ');
     END IF;
 
     IF CHAR_LENGTH(roles_list) > 0 THEN
-        SET roles_list = LEFT(roles_list, CHAR_LENGTH(roles_list) - 2);
+        SET roles_list = LEFT(roles_list, CHAR_LENGTH(roles_list) - 1);
     ELSE
         SET roles_list = 'NO ROLES FOUND';
     END IF;
