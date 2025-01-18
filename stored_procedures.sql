@@ -55,14 +55,11 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	END $$
 DELIMITER ;
 
--- -----------------------------------------------------
--- get AC user submissions
--- -----------------------------------------------------
 
---
-DROP PROCEDURE IF EXISTS get_User_AC_sumbissions;
+
+DROP PROCEDURE IF EXISTS get_user_AC_sumbissions;
 DELIMITER $$
-CREATE PROCEDURE get_User_AC_sumbissions(IN problemId INT)
+CREATE PROCEDURE get_user_AC_sumbissions(IN problemId INT)
 BEGIN
     SELECT *
     FROM vw_user_ac_submissions
@@ -71,15 +68,9 @@ END$$
 DELIMITER ;
 
 
-
--- -----------------------------------------------------
--- get All User submissions
--- -----------------------------------------------------
-
---
-DROP PROCEDURE IF EXISTS get_User_submissions;
+DROP PROCEDURE IF EXISTS get_user_submissions;
 DELIMITER $$
-CREATE PROCEDURE get_User_submissions(IN problemId INT)
+CREATE PROCEDURE get_user_submissions(IN problemId INT)
 BEGIN
     SELECT *
     FROM vw_user_submissions
@@ -88,15 +79,10 @@ END$$
 DELIMITER ;
 
 
--- -----------------------------------------------------
--- get User roles
--- -----------------------------------------------------
-
---
-DROP PROCEDURE IF EXISTS GetUserRoles;
+DROP PROCEDURE IF EXISTS get_user_roles;
 
 DELIMITER $$
-CREATE PROCEDURE GetUserRoles(IN user_handle VARCHAR(255))
+CREATE PROCEDURE get_user_roles(IN user_handle VARCHAR(255))
 BEGIN
     DECLARE roles_list TEXT DEFAULT '';
 
@@ -117,15 +103,10 @@ BEGIN
     ELSE
         SET roles_list = 'NO ROLES FOUND';
     END IF;
-
-    -- Devolver los roles encontrados
+    
     SELECT roles_list AS roles;
 END;$$
 DELIMITER ;
-
-CALL GetUserRoles('lellsom17');
-
-
 
 
 DROP PROCEDURE IF EXISTS query_submission_activity;
@@ -180,3 +161,73 @@ CREATE PROCEDURE query_problem_details_by_name(p_name VARCHAR(45), handle VARCHA
         LIMIT lm OFFSET ofs;
     END $$
 DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- USER PAGE
+-- -----------------------------------------------------
+
+-- Solved problems section
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS get_AC_count_by_handle;
+CREATE PROCEDURE get_AC_count_by_handle(IN contestant_handle VARCHAR(255))
+BEGIN
+    SELECT COUNT(DISTINCT Problem_id) AS TotalAC
+    FROM JUDGE_DB.SUBMISSION
+    WHERE contestant_handle = contestant_handle
+      AND status = 'AC';
+END $$
+DELIMITER ;
+
+
+-- Solved problems the last month
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS get_AC_count_by_handle_lastmonth;
+CREATE PROCEDURE get_AC_count_by_handle_lastmonth(IN contestant_handle VARCHAR(255))
+BEGIN
+    SELECT COUNT(DISTINCT Problem_id) AS TotalRecentAC
+    FROM JUDGE_DB.SUBMISSION
+    WHERE contestant_handle = contestant_handle
+      AND status = 'AC'
+      AND `date` >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+END $$
+DELIMITER ;
+
+
+-- Submissions
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS get_submissions_count_by_handle;
+CREATE PROCEDURE get_submissions_count_by_handle(IN contestant_handle VARCHAR(255))
+BEGIN
+    SELECT COUNT(*) AS TotalSubmissions
+    FROM JUDGE_DB.SUBMISSION
+    WHERE contestant_handle = contestant_handle;
+END $$
+
+DELIMITER ;
+
+
+-- Table
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS get_user_submissions;
+CREATE PROCEDURE get_user_submissions(IN user_handle VARCHAR(255) )
+BEGIN
+    SELECT 
+        s.problem_id, 
+        s.submission_id, 
+        s.code, 
+        s.execution_time_seconds, 
+        s.date, 
+        s.status,
+        p.times_solved
+    FROM vw_user_submissions s
+    LEFT JOIN vw_problem_times_solved p ON s.problem_id = p.id
+    WHERE s.contestant_handle = user_handle;
+END $$
+
+DELIMITER ;
+

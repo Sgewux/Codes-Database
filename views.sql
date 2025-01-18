@@ -31,7 +31,6 @@ CREATE VIEW vw_problem_times_solved
     GROUP BY problem.id);
     
     
-    
 -- ----------------------------------------------------------
 -- -------------------- vw_problem_details ------------------
 -- Shows all the information necesary for the problems page 
@@ -68,7 +67,6 @@ FROM JUDGE_DB.SUBMISSION s
 WHERE s.status = 'AC';
 
 
-
 -- -----------------------------------------------------------------
 -- ---------------- vw_user_submissions -----------------------------
 -- Shows all the information necesary for the problems page 
@@ -88,7 +86,6 @@ SELECT
     s.contestant_handle
 FROM JUDGE_DB.SUBMISSION s
 WHERE s.status IS NOT NULL;
-
 
 
 
