@@ -4,7 +4,9 @@ USE JUDGE_DB ;
 -- Authentication
 -- -----------------------------------------------------
 
--- 
+/*
+
+*/
 DROP PROCEDURE IF EXISTS register;
 DELIMITER $$
 CREATE PROCEDURE register(
@@ -29,58 +31,7 @@ CREATE PROCEDURE register(
 	END $$
 DELIMITER ;
 
-
--- -----------------------------------------------------
--- Users
--- -----------------------------------------------------
-
--- 
-DROP PROCEDURE IF EXISTS find_user_by_handle;
-DELIMITER $$
-CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
-	BEGIN
-		DECLARE user_found INT;
-
-		SELECT COUNT(*) INTO user_found
-		FROM JUDGE_DB.USER
-		WHERE handle = p_handle;
-
-		IF user_found > 0 THEN
-			SELECT *
-			FROM JUDGE_DB.USER
-			WHERE handle = p_handle;
-		ELSE
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User not found';
-		END IF;
-	END $$
-DELIMITER ;
-
-
-
-DROP PROCEDURE IF EXISTS get_user_AC_sumbissions;
-DELIMITER $$
-CREATE PROCEDURE get_user_AC_sumbissions(IN problemId INT)
-BEGIN
-    SELECT *
-    FROM vw_user_ac_submissions
-    WHERE problem_id = problemId;
-END$$
-DELIMITER ;
-
-
-DROP PROCEDURE IF EXISTS get_user_submissions;
-DELIMITER $$
-CREATE PROCEDURE get_user_submissions(IN problemId INT)
-BEGIN
-    SELECT *
-    FROM vw_user_submissions
-    WHERE problem_id = problemId;
-END$$
-DELIMITER ;
-
-
 DROP PROCEDURE IF EXISTS get_user_roles;
-
 DELIMITER $$
 CREATE PROCEDURE get_user_roles(IN user_handle VARCHAR(255))
 BEGIN
@@ -105,10 +56,108 @@ BEGIN
     END IF;
     
     SELECT roles_list AS roles;
-END;$$
+END $$
 DELIMITER ;
 
 
+-- -----------------------------------------------------
+-- Users
+-- -----------------------------------------------------
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS find_user_by_handle;
+DELIMITER $$
+CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
+	BEGIN
+		DECLARE user_found INT;
+
+		SELECT COUNT(*) INTO user_found
+		FROM JUDGE_DB.USER
+		WHERE handle = p_handle;
+
+		IF user_found > 0 THEN
+			SELECT *
+			FROM JUDGE_DB.USER
+			WHERE handle = p_handle;
+		ELSE
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User not found';
+		END IF;
+	END $$
+DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- Submissions
+-- -----------------------------------------------------
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_user_AC_sumbissions;
+DELIMITER $$
+CREATE PROCEDURE get_user_AC_sumbissions(IN problemId INT)
+BEGIN
+    SELECT *
+    FROM vw_user_ac_submissions
+    WHERE problem_id = problemId;
+END$$
+DELIMITER ;
+
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_user_submissions;
+DELIMITER $$
+CREATE PROCEDURE get_user_submissions(IN problemId INT)
+BEGIN
+    SELECT *
+    FROM vw_user_submissions
+    WHERE problem_id = problemId;
+END$$
+DELIMITER ;
+
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_user_submissions;
+DELIMITER $$
+CREATE PROCEDURE get_user_submissions(IN user_handle VARCHAR(255) )
+BEGIN
+    SELECT 
+        s.problem_id, 
+        s.submission_id, 
+        s.code, 
+        s.execution_time_seconds, 
+        s.date, 
+        s.status,
+        p.times_solved
+    FROM vw_user_submissions s
+    LEFT JOIN vw_problem_times_solved p ON s.problem_id = p.id
+    WHERE s.contestant_handle = user_handle;
+END $$
+DELIMITER ;
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_submissions_count_by_handle;
+DELIMITER $$
+CREATE PROCEDURE get_submissions_count_by_handle(IN contestant_handle VARCHAR(255))
+BEGIN
+    SELECT COUNT(*) AS TotalSubmissions
+    FROM JUDGE_DB.SUBMISSION
+    WHERE contestant_handle = contestant_handle;
+END $$
+DELIMITER ;
+
+
+/*
+
+*/
 DROP PROCEDURE IF EXISTS query_submission_activity;
 DELIMITER $$
 CREATE PROCEDURE query_submission_activity(handle VARCHAR(20), from_d DATE, to_d DATE)
@@ -119,6 +168,14 @@ CREATE PROCEDURE query_submission_activity(handle VARCHAR(20), from_d DATE, to_d
     END $$
 DELIMITER ;
 
+
+-- -----------------------------------------------------
+-- Problems
+-- -----------------------------------------------------
+
+/*
+
+*/
 DROP PROCEDURE IF EXISTS query_problem_details_for_user;
 DELIMITER $$
 CREATE PROCEDURE query_problem_details_for_user(handle VARCHAR(20), filt ENUM('all', 'accepted', 'tried'), lm INT, ofS INT)
@@ -149,6 +206,10 @@ CREATE PROCEDURE query_problem_details_for_user(handle VARCHAR(20), filt ENUM('a
     END $$
 DELIMITER ;
 
+
+/*
+
+*/
 DROP PROCEDURE IF EXISTS query_problem_details_by_name;
 DELIMITER $$
 CREATE PROCEDURE query_problem_details_by_name(p_name VARCHAR(45), handle VARCHAR(20), lm INT, ofs INT)
@@ -167,10 +228,11 @@ DELIMITER ;
 -- USER PAGE
 -- -----------------------------------------------------
 
--- Solved problems section
+/*
 
-DELIMITER $$
+*/
 DROP PROCEDURE IF EXISTS get_AC_count_by_handle;
+DELIMITER $$
 CREATE PROCEDURE get_AC_count_by_handle(IN contestant_handle VARCHAR(255))
 BEGIN
     SELECT COUNT(DISTINCT Problem_id) AS TotalAC
@@ -181,10 +243,11 @@ END $$
 DELIMITER ;
 
 
--- Solved problems the last month
+/*
 
-DELIMITER $$
+*/
 DROP PROCEDURE IF EXISTS get_AC_count_by_handle_lastmonth;
+DELIMITER $$
 CREATE PROCEDURE get_AC_count_by_handle_lastmonth(IN contestant_handle VARCHAR(255))
 BEGIN
     SELECT COUNT(DISTINCT Problem_id) AS TotalRecentAC
@@ -194,40 +257,3 @@ BEGIN
       AND `date` >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
 END $$
 DELIMITER ;
-
-
--- Submissions
-
-DELIMITER $$
-DROP PROCEDURE IF EXISTS get_submissions_count_by_handle;
-CREATE PROCEDURE get_submissions_count_by_handle(IN contestant_handle VARCHAR(255))
-BEGIN
-    SELECT COUNT(*) AS TotalSubmissions
-    FROM JUDGE_DB.SUBMISSION
-    WHERE contestant_handle = contestant_handle;
-END $$
-
-DELIMITER ;
-
-
--- Table
-
-DELIMITER $$
-DROP PROCEDURE IF EXISTS get_user_submissions;
-CREATE PROCEDURE get_user_submissions(IN user_handle VARCHAR(255) )
-BEGIN
-    SELECT 
-        s.problem_id, 
-        s.submission_id, 
-        s.code, 
-        s.execution_time_seconds, 
-        s.date, 
-        s.status,
-        p.times_solved
-    FROM vw_user_submissions s
-    LEFT JOIN vw_problem_times_solved p ON s.problem_id = p.id
-    WHERE s.contestant_handle = user_handle;
-END $$
-
-DELIMITER ;
-

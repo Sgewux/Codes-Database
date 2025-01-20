@@ -1,10 +1,15 @@
--- -----------------------------------------------------------------
--- ---------------- get_problem_status -----------------------------
--- Returns the problem status for a given user in a given problem
--- returns AC if the user has solved the problem at least once
--- returns NT if the user has not made any submissions to this problem
--- otherwise, returns the status of the last submission.
--- -----------------------------------------------------------------
+USE JUDGE_DB;
+
+-- -----------------------------------------------------
+-- Problems
+-- -----------------------------------------------------
+
+/*
+	Returns the problem status for a given user in a given problem
+	returns AC if the user has solved the problem at least once
+	returns NT if the user has not made any submissions to this problem
+	otherwise, returns the status of the last submission.
+*/
 DROP FUNCTION IF EXISTS get_problem_status;
 DELIMITER $$
 CREATE FUNCTION get_problem_status(problem_id INT, contestant_handle VARCHAR(20)) RETURNS ENUM('AC', 'WA', 'TL', 'RT', 'CE', 'NT') DETERMINISTIC

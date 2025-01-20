@@ -165,8 +165,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- User deffinition
+-- User definition
 -- -----------------------------------------------------
+
 DROP USER IF EXISTS 'application'@'localhost';
 CREATE USER 'application'@'localhost' IDENTIFIED BY 'password';
 

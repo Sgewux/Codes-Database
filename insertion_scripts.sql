@@ -1,15 +1,6 @@
-SET SQL_SAFE_UPDATES = 0;
-
--- DELETE FROM JUDGE_DB.FRIENDSHIP;
-DELETE FROM JUDGE_DB.SUBMISSION;
--- DELETE FROM JUDGE_DB.CONTESTANT;
--- DELETE FROM JUDGE_DB.PROBLEM;
--- DELETE FROM JUDGE_DB.ADMIN;
--- DELETE FROM JUDGE_DB.PROBLEMSETTER;
--- DELETE FROM JUDGE_DB.USER;
--- DELETE FROM JUDGE_DB.TEST;
-
-
+-- -----------------------------------------------------
+-- Table JUDGE_DB.USER
+-- -----------------------------------------------------
 
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('gtattersill0', 'Gwen', 'Tattersill', 'oU3`=N9KPm9');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('rnichol1', 'Randi', 'Nichol', 'cX7"m''p?');
@@ -63,6 +54,10 @@ insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('aar
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('dcheesley1d', 'Demetre', 'Cheesley', 'vP6%9pe$');
 
 
+-- -----------------------------------------------------
+-- Table JUDGE_DB.PROBLEMSETTER
+-- -----------------------------------------------------
+
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('pminerdoy');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('jgenikez');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('agozzett10');
@@ -80,6 +75,10 @@ INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('svernay1b');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('aarno1c');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('dcheesley1d');
 
+
+-- -----------------------------------------------------
+-- Table JUDGE_DB.PROBLEM
+-- -----------------------------------------------------
 
 insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('Gas Relief', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'dcheesley1d');
 insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('Solodyn', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'kpurviss13');
@@ -99,6 +98,9 @@ insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, me
 insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('Etodolac', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'kpurviss13');
 
 
+-- -----------------------------------------------------
+-- Table JUDGE_DB.CONTESTANT
+-- -----------------------------------------------------
 
 INSERT INTO JUDGE_DB.CONTESTANT(handle) VALUES ('shollyero');
 INSERT INTO JUDGE_DB.CONTESTANT(handle) VALUES ('ddelamainep');
@@ -112,6 +114,10 @@ INSERT INTO JUDGE_DB.CONTESTANT(handle) VALUES ('alightmanw');
 INSERT INTO JUDGE_DB.CONTESTANT(handle) VALUES ('cfairex');
 
 
+-- -----------------------------------------------------
+-- Table JUDGE_DB.ADMIN
+-- -----------------------------------------------------
+
 INSERT INTO JUDGE_DB.ADMIN (handle) VALUES ('lellsom17');
 INSERT INTO JUDGE_DB.ADMIN (handle) VALUES ('caddenbrooke18');
 INSERT INTO JUDGE_DB.ADMIN (handle) VALUES ('mashling19');
@@ -120,15 +126,24 @@ INSERT INTO JUDGE_DB.ADMIN (handle) VALUES ('svernay1b');
 INSERT INTO JUDGE_DB.ADMIN (handle) VALUES ('aarno1c');
 INSERT INTO JUDGE_DB.ADMIN (handle) VALUES ('dcheesley1d');
 
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2011-01-11", 'print("Hello World")', 45, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-02 00:00:00", 'for i in range(10): print(i)', 45, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 1.123, "2025-01-11", 'print("Hello World")', 45, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-03", 'for i in range(10): print(i)', 45, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2025-01-05", 'print("Hello World")', 47, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-11", 'for i in range(10): print(i)', 45, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2022-01-11", 'print("Hello World")', 45, 'shollyero');
-INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 45, 'shollyero');
 
+-- -----------------------------------------------------
+-- Table JUDGE_DB.SUBMISSION
+-- -----------------------------------------------------
+
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2011-01-11", 'print("Hello World")', 4, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-02 00:00:00", 'for i in range(10): print(i)', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 1.123, "2025-01-11", 'print("Hello World")', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-03", 'for i in range(10): print(i)', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2025-01-05", 'print("Hello World")', 7, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-11", 'for i in range(10): print(i)', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2022-01-11", 'print("Hello World")', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 5, 'shollyero');
+
+
+-- -----------------------------------------------------
+-- Table JUDGE_DB.TEST
+-- -----------------------------------------------------
 
 INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (1, 5, 'input for problem', 'output for problem');
 INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (2, 6, 'input for problem', 'output for problem');
@@ -138,6 +153,10 @@ INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (5, 4, 'inp
 INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (6, 5, 'input for problem', 'output for problem');
 INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (7, 1, 'input for problem', 'output for problem');
 
+
+-- -----------------------------------------------------
+-- Table JUDGE_DB.FRIENDSHIP
+-- -----------------------------------------------------
 
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'cfairex');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'shollyero');
