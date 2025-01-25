@@ -35,3 +35,44 @@ CREATE FUNCTION get_problem_status(problem_id INT, contestant_handle VARCHAR(20)
         
     END $$
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- Users
+-- -----------------------------------------------------
+/*
+	Given the user handle, gets how many days have passed from his last submission.
+    Returns NULL if the user has not submitted any code.
+*/
+DROP FUNCTION IF EXISTS get_days_from_last_submission;
+DELIMITER $$
+CREATE FUNCTION get_days_from_last_submission(handle VARCHAR(20)) RETURNS INT DETERMINISTIC
+	BEGIN 
+    DECLARE last_submit_date DATE;
+    DECLARE submit_count INT;
+    
+    SELECT COUNT(*) FROM vw_user_submissions WHERE vw_user_submissions.contestant_handle = handle INTO submit_count;
+    
+    IF submit_count = 0 THEN RETURN NULL;
+    ELSE 
+		SELECT date FROM vw_user_submissions WHERE vw_user_submissions.contestant_handle = handle ORDER BY date DESC LIMIT 1 INTO last_submit_date;
+        RETURN TO_DAYS(NOW()) - TO_DAYS(last_submit_date);
+    END IF;
+    
+    END $$
+DELIMITER ;
+
+/*
+	Given two handles returns true if contestant with handle1 is in the friends list of contestant with handle2
+*/
+DROP FUNCTION IF EXISTS is_friend;
+DELIMITER $$
+CREATE FUNCTION is_friend(handle1 VARCHAR(20), handle2 VARCHAR(20)) RETURNS BOOLEAN DETERMINISTIC
+	BEGIN
+		DECLARE cnt INT;
+		SELECT COUNT(*) FROM friendship WHERE contestant_handle = handle2 AND friend_handle = handle1 INTO cnt;
+        
+        IF cnt = 0 THEN RETURN FALSE;
+        ELSE RETURN TRUE;
+        END IF;
+    END $$
+DELIMITER ;

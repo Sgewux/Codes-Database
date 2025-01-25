@@ -87,6 +87,32 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_user_summary_for_user;
+DELIMITER $$
+CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), lm INT, ofs INT)
+	BEGIN 
+    
+	SELECT COUNT(*)
+		FROM 
+		contestant
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+		ON t1.contestant_handle = handle
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+		ON t2.contestant_handle = handle
+        WHERE contestant.handle != p_handle;
+    
+    SELECT handle, IFNULL(submissions,0) AS submissions , IFNULL(ACSubmissions,0) AS ACSubmissions,
+			get_days_from_last_submission(handle) AS lastSubmissionDaysAgo, is_friend(handle, p_handle) AS isFriend
+		FROM 
+		contestant
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+		ON t1.contestant_handle = handle
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+		ON t2.contestant_handle = handle
+        WHERE contestant.handle != p_handle
+        LIMIT lm OFFSET ofs;
+    END $$
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Submissions

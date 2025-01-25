@@ -177,7 +177,7 @@ INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (7, 1, 'inp
 -- -----------------------------------------------------
 
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'cfairex');
-INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'shollyero');
+INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('shollyero', 'qkornaliku');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'ddelamainep');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'kcasselr');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'mianiellos');
