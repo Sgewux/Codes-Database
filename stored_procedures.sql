@@ -92,18 +92,6 @@ DELIMITER ;
 -- Submissions
 -- -----------------------------------------------------
 
-/*
-
-*/
-DROP PROCEDURE IF EXISTS get_user_AC_sumbissions;
-DELIMITER $$
-CREATE PROCEDURE get_user_AC_sumbissions(IN problemId INT)
-BEGIN
-    SELECT *
-    FROM vw_user_ac_submissions
-    WHERE problem_id = problemId;
-END$$
-DELIMITER ;
 
 
 /*
@@ -141,18 +129,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*
-
-*/
-DROP PROCEDURE IF EXISTS get_submissions_count_by_handle;
-DELIMITER $$
-CREATE PROCEDURE get_submissions_count_by_handle(IN contestant_handle VARCHAR(255))
-BEGIN
-    SELECT COUNT(*) AS TotalSubmissions
-    FROM JUDGE_DB.SUBMISSION
-    WHERE contestant_handle = contestant_handle;
-END $$
-DELIMITER ;
 
 
 /*
@@ -231,29 +207,21 @@ DELIMITER ;
 /*
 
 */
-DROP PROCEDURE IF EXISTS get_AC_count_by_handle;
+DROP PROCEDURE IF EXISTS get_AC_statistics;
+
 DELIMITER $$
-CREATE PROCEDURE get_AC_count_by_handle(IN contestant_handle VARCHAR(255))
+CREATE PROCEDURE get_AC_statistics(IN in_contestant_handle VARCHAR(255))
 BEGIN
-    SELECT COUNT(DISTINCT Problem_id) AS TotalAC
+    SELECT 
+        COUNT(DISTINCT CASE WHEN status = 'AC' THEN Problem_id END) AS TotalAC,
+        COUNT(DISTINCT CASE WHEN status = 'AC' AND `date` >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) THEN Problem_id END) AS TotalRecentAC,
+        COUNT(*) AS TotalSubmissions
     FROM JUDGE_DB.SUBMISSION
-    WHERE contestant_handle = contestant_handle
-      AND status = 'AC';
+    WHERE contestant_handle = in_contestant_handle;
 END $$
 DELIMITER ;
 
 
-/*
 
-*/
-DROP PROCEDURE IF EXISTS get_AC_count_by_handle_lastmonth;
-DELIMITER $$
-CREATE PROCEDURE get_AC_count_by_handle_lastmonth(IN contestant_handle VARCHAR(255))
-BEGIN
-    SELECT COUNT(DISTINCT Problem_id) AS TotalRecentAC
-    FROM JUDGE_DB.SUBMISSION
-    WHERE contestant_handle = contestant_handle
-      AND status = 'AC'
-      AND `date` >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
-END $$
-DELIMITER ;
+
+
