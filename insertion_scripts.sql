@@ -80,7 +80,25 @@ INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('dcheesley1d');
 -- Table JUDGE_DB.PROBLEM
 -- -----------------------------------------------------
 
-insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('Gas Relief', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'dcheesley1d');
+insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) 
+	values ('Max Number', 
+			'You are given 3 numbers $a,b,c$ and you are asked to ouput $max(a,b,c)$ i.e. the biggest one. Can you do it?
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+
+### Input
+
+Three numbers $1\\le a,b,c\\le10^9$
+
+### Output
+
+A single number $max(a,b,c)$.
+
+### Example
+
+**Input**: 1 3 2
+
+**output**: 3', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'dcheesley1d');
 insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('Solodyn', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'kpurviss13');
 insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('ESIKA', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'agozzett10');
 insert into JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb,problemsetter_handle) values ('Voltaren', 'adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non', 'justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum', 2, 683, 'lellsom17');
@@ -159,7 +177,7 @@ INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output) VALUES (7, 1, 'inp
 -- -----------------------------------------------------
 
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'cfairex');
-INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'shollyero');
+INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('shollyero', 'qkornaliku');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'ddelamainep');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'kcasselr');
 INSERT INTO JUDGE_DB.FRIENDSHIP (contestant_handle, friend_handle) VALUES('qkornaliku', 'mianiellos');

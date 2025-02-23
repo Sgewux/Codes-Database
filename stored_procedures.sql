@@ -87,6 +87,32 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_user_summary_for_user;
+DELIMITER $$
+CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), lm INT, ofs INT)
+	BEGIN 
+    
+	SELECT COUNT(*)
+		FROM 
+		contestant
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+		ON t1.contestant_handle = handle
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+		ON t2.contestant_handle = handle
+        WHERE contestant.handle != p_handle;
+    
+    SELECT handle, IFNULL(submissions,0) AS submissions , IFNULL(ACSubmissions,0) AS ACSubmissions,
+			get_days_from_last_submission(handle) AS lastSubmissionDaysAgo, is_friend(handle, p_handle) AS isFriend
+		FROM 
+		contestant
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+		ON t1.contestant_handle = handle
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+		ON t2.contestant_handle = handle
+        WHERE contestant.handle != p_handle
+        LIMIT lm OFFSET ofs;
+    END $$
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Submissions
@@ -134,9 +160,9 @@ DELIMITER ;
 /*
 
 */
-DROP PROCEDURE IF EXISTS query_submission_activity;
+DROP PROCEDURE IF EXISTS get_submission_activity;
 DELIMITER $$
-CREATE PROCEDURE query_submission_activity(handle VARCHAR(20), from_d DATE, to_d DATE)
+CREATE PROCEDURE get_submission_activity(handle VARCHAR(20), from_d DATE, to_d DATE)
 	BEGIN
 		SELECT * FROM vw_submission_activity 
         WHERE contestant_handle = handle AND vw_submission_activity.date >= from_d AND vw_submission_activity.date <= to_d 
@@ -152,9 +178,9 @@ DELIMITER ;
 /*
 
 */
-DROP PROCEDURE IF EXISTS query_problem_details_for_user;
+DROP PROCEDURE IF EXISTS get_problem_details_for_user;
 DELIMITER $$
-CREATE PROCEDURE query_problem_details_for_user(handle VARCHAR(20), filt ENUM('all', 'accepted', 'tried'), lm INT, ofS INT)
+CREATE PROCEDURE get_problem_details_for_user(handle VARCHAR(20), filt ENUM('all', 'accepted', 'tried'), lm INT, ofS INT)
 	BEGIN
 
     IF filt = 'all' THEN
@@ -186,9 +212,9 @@ DELIMITER ;
 /*
 
 */
-DROP PROCEDURE IF EXISTS query_problem_details_by_name;
+DROP PROCEDURE IF EXISTS get_problem_details_by_name;
 DELIMITER $$
-CREATE PROCEDURE query_problem_details_by_name(p_name VARCHAR(45), handle VARCHAR(20), lm INT, ofs INT)
+CREATE PROCEDURE get_problem_details_by_name(p_name VARCHAR(45), handle VARCHAR(20), lm INT, ofs INT)
 	BEGIN
 		SELECT COUNT(*) AS records FROM (SELECT id, name, author, editorial, times_solved, get_problem_status(id, handle) AS status
         FROM vw_problem_details) as t1  WHERE name LIKE CONCAT(p_name, '%');
@@ -199,6 +225,17 @@ CREATE PROCEDURE query_problem_details_by_name(p_name VARCHAR(45), handle VARCHA
     END $$
 DELIMITER ;
 
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_problem_by_id;
+DELIMITER $$
+CREATE PROCEDURE get_problem_by_id(problem_id INT)
+	BEGIN
+		SELECT id, name, problemsetter_handle AS 'author', time_limit_seconds AS 'timeLimitSeconds', statement, editorial
+		FROM problem WHERE id = problem_id;
+    END $$
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- USER PAGE
