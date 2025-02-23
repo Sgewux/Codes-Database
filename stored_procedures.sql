@@ -220,8 +220,3 @@ BEGIN
     WHERE contestant_handle = in_contestant_handle;
 END $$
 DELIMITER ;
-
-
-
-
-
