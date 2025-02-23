@@ -157,6 +157,9 @@ INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, pro
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-11", 'for i in range(10): print(i)', 5, 'shollyero');
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2022-01-11", 'print("Hello World")', 5, 'shollyero');
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-02-22", 'for i in range(10): print(i)', 5, 'cfairex');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 2.456, "2025-01-22", 'for i in range(10): print(i)', 5, 'alislet');
+
 
 
 -- -----------------------------------------------------
