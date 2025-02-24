@@ -26,7 +26,6 @@ insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('bco
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('rpennelll', 'Riki', 'Pennell', 'vY4.xXR"cJeKNX@');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('smaymanm', 'Sandie', 'Mayman', 'wL9>Q6BPVxTW>');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('slantiffn', 'Sibelle', 'Lantiff', 'sS5!''e?1(Y\hM');
-insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('shollyero', 'Shena', 'Hollyer', 'pE0)Wxv''jZLrv');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('ddelamainep', 'Danila', 'Delamaine', 'wU1.)2<z@F');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('eadamskiq', 'Ermanno', 'Adamski', 'rR5_?=Ij!J#');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('kcasselr', 'Kristien', 'Cassel', 'tR9?E.%gP5XjYprG');
@@ -53,6 +52,7 @@ insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('sve
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('aarno1c', 'Audra', 'Arno', 'gA0,qX#V8{`1rk');
 insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('dcheesley1d', 'Demetre', 'Cheesley', 'vP6%9pe$');
 
+insert into JUDGE_DB.USER (handle, first_name, last_name, password) values ('shollyero', 'Shena', 'Hollyer', '1234');
 
 -- -----------------------------------------------------
 -- Table JUDGE_DB.PROBLEMSETTER
@@ -157,7 +157,9 @@ INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, pro
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2025-01-11", 'for i in range(10): print(i)', 5, 'shollyero');
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 1.123, "2022-01-11", 'print("Hello World")', 5, 'shollyero');
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 5, 'shollyero');
+INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 3, 'shollyero');
 
+select * from JUDGE_DB.SUBMISSION;
 
 -- -----------------------------------------------------
 -- Table JUDGE_DB.TEST

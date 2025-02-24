@@ -7,38 +7,56 @@ USE JUDGE_DB;
 
 */
 DROP PROCEDURE IF EXISTS get_user_submissions;
+
 DELIMITER $$
-CREATE PROCEDURE get_user_submissions(IN problemId INT)
+
+CREATE PROCEDURE get_user_submissions(
+    IN user_handle VARCHAR(255),
+    IN filter ENUM('all', 'accepted', 'tried'),
+    IN limit_value INT,
+    IN offset_value INT
+)
 BEGIN
-    SELECT *
-    FROM vw_user_submissions
-    WHERE problem_id = problemId;
-END$$
+
+    SELECT s.id, s.problem_name, s.date, s.status
+    FROM vw_user_submissions s
+    WHERE s.contestant_handle = user_handle
+    AND (
+        filter = 'all' 
+        OR (filter = 'accepted' AND s.status = 'AC') 
+        OR (filter = 'tried' AND s.status != 'AC')
+    )
+    LIMIT limit_value OFFSET offset_value;
+END $$
+
 DELIMITER ;
 
-
+call get_user_submissions("shollyero", "all", 4 , 0);
 /*
 
 */
-DROP PROCEDURE IF EXISTS get_user_submissions;
+
+DROP PROCEDURE IF EXISTS count_user_submissions;
 DELIMITER $$
-CREATE PROCEDURE get_user_submissions(IN user_handle VARCHAR(255) )
+
+CREATE PROCEDURE count_user_submissions(
+    IN user_handle VARCHAR(255),
+    IN filter ENUM('all', 'accepted', 'tried')
+)
 BEGIN
-    SELECT 
-        s.problem_id, 
-        s.submission_id, 
-        s.code, 
-        s.execution_time_seconds, 
-        s.date, 
-        s.status,
-        p.times_solved
+    SELECT COUNT(*) AS submission_count
     FROM vw_user_submissions s
-    LEFT JOIN vw_problem_times_solved p ON s.problem_id = p.id
-    WHERE s.contestant_handle = user_handle;
+    WHERE s.contestant_handle = user_handle
+    AND (
+        filter = 'all' 
+        OR (filter = 'accepted' AND s.status = 'AC') 
+        OR (filter = 'tried' AND s.status != 'AC')
+    );
 END $$
+
 DELIMITER ;
 
-
+	
 /*
 
 */

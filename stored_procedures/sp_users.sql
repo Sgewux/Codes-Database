@@ -23,6 +23,9 @@ CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	END $$
 DELIMITER ;
 
+
+
+
 DROP PROCEDURE IF EXISTS get_user_summary_for_user;
 DELIMITER $$
 CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), lm INT, ofs INT)
