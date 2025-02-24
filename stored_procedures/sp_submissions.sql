@@ -31,7 +31,6 @@ END $$
 
 DELIMITER ;
 
-call get_user_submissions("shollyero", "all", 4 , 0);
 /*
 
 */
