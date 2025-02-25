@@ -161,8 +161,6 @@ INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, pro
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('AC', 2.456, "2025-01-22", 'for i in range(10): print(i)', 5, 'alislet');
 
 
-select * from JUDGE_DB.SUBMISSION;
-
 -- -----------------------------------------------------
 -- Table JUDGE_DB.TEST
 -- -----------------------------------------------------

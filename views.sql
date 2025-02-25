@@ -29,25 +29,6 @@ FROM JUDGE_DB.SUBMISSION s
 JOIN JUDGE_DB.PROBLEM p ON s.problem_id = p.id; 
 
 
-
-
-/*
-	Shows all the information necesary for the problems page 
-	(tried)
-*/
-DROP VIEW IF EXISTS vw_user_submissions;
-CREATE VIEW vw_user_submissions AS
-SELECT 
-    s.problem_id, 
-    s.id AS submission_id, 
-    s.code, 
-    s.execution_time_seconds, 
-    s.date, 
-    s.status, 
-    s.contestant_handle
-FROM JUDGE_DB.SUBMISSION s
-WHERE s.status IS NOT NULL;
-    
     
 -- -----------------------------------------------------
 -- Problems
