@@ -1,4 +1,5 @@
 USE JUDGE_DB;
+
 -- -----------------------------------------------------
 -- Problems
 -- -----------------------------------------------------
@@ -37,7 +38,6 @@ CREATE PROCEDURE get_problem_details_for_user(handle VARCHAR(20), filt ENUM('all
 DELIMITER ;
 
 
-
 /*
 
 */
@@ -53,6 +53,7 @@ CREATE PROCEDURE get_problem_details_by_name(p_name VARCHAR(45), handle VARCHAR(
         LIMIT lm OFFSET ofs;
     END $$
 DELIMITER ;
+
 
 /*
 

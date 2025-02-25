@@ -1,59 +1,53 @@
 USE JUDGE_DB;
+
 -- -----------------------------------------------------
 -- Authentication
 -- -----------------------------------------------------
 
 /*
-
+	Registers a new user in the system by inserting their details into the `USER` table 
+	and automatically assigning them the "contestant" role.
 */
-DROP PROCEDURE IF EXISTS register;
+DROP PROCEDURE IF EXISTS register_contestant;
 DELIMITER $$
-CREATE PROCEDURE register(
+CREATE PROCEDURE register_contestant(
 	IN p_handle VARCHAR(20),
 	IN p_first_name VARCHAR(45),
 	IN p_last_name VARCHAR(45),
 	IN p_password VARCHAR(100)
 )
 	BEGIN
-		DECLARE handle_exists INT;
-
-		SELECT COUNT(*) INTO handle_exists
-		FROM JUDGE_DB.USER
-		WHERE handle = p_handle;
-
-		IF handle_exists > 0 THEN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Handle already used';
-		ELSE
-			INSERT INTO JUDGE_DB.USER (handle, first_name, last_name, password)
-			VALUES (p_handle, p_first_name, p_last_name, p_password);
-		END IF;
+		INSERT INTO JUDGE_DB.USER (handle, first_name, last_name, password)
+		VALUES (p_handle, p_first_name, p_last_name, p_password);
+        
+        INSERT INTO JUDGE_DB.CONTESTANT (handle) VALUES (p_handle);
 	END $$
 DELIMITER ;
 
+
+/*
+	Retrieves the roles assigned to a given user and returns them as a table.
+*/
 DROP PROCEDURE IF EXISTS get_user_roles;
 DELIMITER $$
 CREATE PROCEDURE get_user_roles(IN user_handle VARCHAR(255))
 BEGIN
-    DECLARE roles_list TEXT DEFAULT '';
+    CREATE TEMPORARY TABLE IF NOT EXISTS temp_roles (role_name VARCHAR(50));
 
     IF EXISTS (SELECT 1 FROM JUDGE_DB.ADMIN WHERE handle = user_handle) THEN
-        SET roles_list = CONCAT(roles_list, 'ADMIN ');
+        INSERT INTO temp_roles (role_name) VALUES ('admin');
     END IF;
 
     IF EXISTS (SELECT 1 FROM JUDGE_DB.CONTESTANT WHERE handle = user_handle) THEN
-        SET roles_list = CONCAT(roles_list, 'CONTESTANT ');
+        INSERT INTO temp_roles (role_name) VALUES ('contestant');
     END IF;
 
     IF EXISTS (SELECT 1 FROM JUDGE_DB.PROBLEMSETTER WHERE handle = user_handle) THEN
-        SET roles_list = CONCAT(roles_list, 'PROBLEMSETTER ');
+        INSERT INTO temp_roles (role_name) VALUES ('problem_setter');
     END IF;
 
-    IF CHAR_LENGTH(roles_list) > 0 THEN
-        SET roles_list = LEFT(roles_list, CHAR_LENGTH(roles_list) - 1);
-    ELSE
-        SET roles_list = 'NO ROLES FOUND';
-    END IF;
-    
-    SELECT roles_list AS roles;
+    SELECT * FROM temp_roles;
+
+    DROP TEMPORARY TABLE temp_roles;
 END $$
 DELIMITER ;

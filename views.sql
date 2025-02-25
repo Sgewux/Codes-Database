@@ -28,6 +28,11 @@ SELECT s.id, s.problem_id, p.name AS problem_name, s.date, s.status, s.contestan
 FROM JUDGE_DB.SUBMISSION s
 JOIN JUDGE_DB.PROBLEM p ON s.problem_id = p.id; 
 
+<<<<<<< HEAD
+=======
+
+    
+>>>>>>> 4580b0bcdeecb017171bfa8f080956c4367e6d6a
 -- -----------------------------------------------------
 -- Problems
 -- -----------------------------------------------------

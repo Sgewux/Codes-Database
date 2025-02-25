@@ -1,37 +1,30 @@
 USE JUDGE_DB;
+
 -- -----------------------------------------------------
 -- Users
 -- -----------------------------------------------------
 
+/*
+	Searches for a user in the `USER` table using their unique handle.
+*/
 DROP PROCEDURE IF EXISTS find_user_by_handle;
 DELIMITER $$
 CREATE PROCEDURE find_user_by_handle(IN p_handle VARCHAR(20))
 	BEGIN
-		DECLARE user_found INT;
-
-		SELECT COUNT(*) INTO user_found
-		FROM JUDGE_DB.USER
-		WHERE handle = p_handle;
-
-		IF user_found > 0 THEN
-			SELECT *
-			FROM JUDGE_DB.USER
-			WHERE handle = p_handle;
-		ELSE
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User not found';
-		END IF;
+		SELECT * FROM JUDGE_DB.USER WHERE handle = p_handle;
 	END $$
 DELIMITER ;
 
 
+/*
 
-
+*/
 DROP PROCEDURE IF EXISTS get_user_summary_for_user;
 DELIMITER $$
-CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), lm INT, ofs INT)
+CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), filt ENUM('all', 'friends'), lm INT, ofs INT)
 	BEGIN 
-    
-	SELECT COUNT(*)
+    IF filt = 'all' THEN
+		SELECT COUNT(*) as records
 		FROM 
 		contestant
 		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
@@ -40,7 +33,55 @@ CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), lm INT, ofs IN
 		ON t2.contestant_handle = handle
         WHERE contestant.handle != p_handle;
     
-    SELECT handle, IFNULL(submissions,0) AS submissions , IFNULL(ACSubmissions,0) AS ACSubmissions,
+		SELECT handle, IFNULL(submissions,0) AS submissions , IFNULL(ACSubmissions,0) AS ACSubmissions,
+				get_days_from_last_submission(handle) AS lastSubmissionDaysAgo, is_friend(handle, p_handle) AS isFriend
+			FROM 
+			contestant
+			LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+			ON t1.contestant_handle = handle
+			LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+			ON t2.contestant_handle = handle
+			WHERE contestant.handle != p_handle
+			LIMIT lm OFFSET ofs;
+    ELSEIF filt = 'friends' THEN
+    	SELECT COUNT(*) as records
+		FROM 
+		contestant
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+		ON t1.contestant_handle = handle
+		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+		ON t2.contestant_handle = handle
+        WHERE contestant.handle != p_handle AND is_friend(handle, p_handle) = 1;
+    
+		SELECT handle, IFNULL(submissions,0) AS submissions , IFNULL(ACSubmissions,0) AS ACSubmissions,
+				get_days_from_last_submission(handle) AS lastSubmissionDaysAgo, is_friend(handle, p_handle) AS isFriend
+			FROM 
+			contestant
+			LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+			ON t1.contestant_handle = handle
+			LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+			ON t2.contestant_handle = handle
+			WHERE contestant.handle != p_handle AND is_friend(handle, p_handle)=1
+			LIMIT lm OFFSET ofs;
+    END IF;
+
+    END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_user_summary_by_handle;
+DELIMITER $$
+CREATE PROCEDURE get_user_summary_by_handle(p_handle VARCHAR(20), searchHandle VARCHAR(20), lm INT, ofs INT)
+BEGIN
+	SELECT COUNT(*) as records
+	FROM 
+	contestant
+	LEFT JOIN (SELECT contestant_handle, COUNT(*) AS ACSubmissions FROM vw_user_ac_submissions GROUP BY contestant_handle) AS t1
+	ON t1.contestant_handle = handle
+	LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
+	ON t2.contestant_handle = handle
+	WHERE contestant.handle != p_handle AND contestant.handle LIKE CONCAT(searchHandle, '%');
+
+	SELECT handle, IFNULL(submissions,0) AS submissions , IFNULL(ACSubmissions,0) AS ACSubmissions,
 			get_days_from_last_submission(handle) AS lastSubmissionDaysAgo, is_friend(handle, p_handle) AS isFriend
 		FROM 
 		contestant
@@ -48,15 +89,10 @@ CREATE PROCEDURE  get_user_summary_for_user(p_handle VARCHAR(20), lm INT, ofs IN
 		ON t1.contestant_handle = handle
 		LEFT JOIN (SELECT contestant_handle, COUNT(*) AS submissions FROM vw_user_submissions GROUP BY contestant_handle) AS t2
 		ON t2.contestant_handle = handle
-        WHERE contestant.handle != p_handle
-        LIMIT lm OFFSET ofs;
-    END $$
+		WHERE contestant.handle != p_handle AND contestant.handle LIKE CONCAT(searchHandle, '%')
+		LIMIT lm OFFSET ofs;
+END $$
 DELIMITER ;
-
-
--- -----------------------------------------------------
--- USER PAGE
--- -----------------------------------------------------
 
 /*
 
