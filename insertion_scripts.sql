@@ -74,7 +74,7 @@ INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('gdrewitt1a');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('svernay1b');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('aarno1c');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('dcheesley1d');
-
+INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('shollyero');
 
 -- -----------------------------------------------------
 -- Table JUDGE_DB.PROBLEM
@@ -159,7 +159,6 @@ INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, pro
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 5, 'shollyero');
 INSERT INTO JUDGE_DB.SUBMISSION (status, execution_time_seconds, date, code, problem_id, contestant_handle) VALUES ('WA', 2.456, "2022-03-11", 'for i in range(10): print(i)', 3, 'shollyero');
 
-select * from JUDGE_DB.SUBMISSION;
 
 -- -----------------------------------------------------
 -- Table JUDGE_DB.TEST

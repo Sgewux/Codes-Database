@@ -28,27 +28,6 @@ SELECT s.id, s.problem_id, p.name AS problem_name, s.date, s.status, s.contestan
 FROM JUDGE_DB.SUBMISSION s
 JOIN JUDGE_DB.PROBLEM p ON s.problem_id = p.id; 
 
-
-
-
-/*
-	Shows all the information necesary for the problems page 
-	(tried)
-*/
-DROP VIEW IF EXISTS vw_user_submissions;
-CREATE VIEW vw_user_submissions AS
-SELECT 
-    s.problem_id, 
-    s.id AS submission_id, 
-    s.code, 
-    s.execution_time_seconds, 
-    s.date, 
-    s.status, 
-    s.contestant_handle
-FROM JUDGE_DB.SUBMISSION s
-WHERE s.status IS NOT NULL;
-    
-    
 -- -----------------------------------------------------
 -- Problems
 -- -----------------------------------------------------
@@ -76,3 +55,18 @@ CREATE VIEW vw_problem_details AS
 SELECT p.id, p.name, p.problemsetter_handle AS author, p.editorial, IFNULL(times_solved, 0) AS times_solved
 	FROM JUDGE_DB.PROBLEM p
     LEFT JOIN vw_problem_times_solved ON p.id = vw_problem_times_solved.id;
+    
+    
+    
+/*
+	Read for CRUD
+*/  
+CREATE VIEW vw_problems AS
+SELECT p.id AS problem_id, p.name, p.statement, p.editorial, p.time_limit_seconds, p.memory_limit_mb, p.problemsetter_handle, t.input AS test_input,
+t.output AS test_output
+FROM 
+    JUDGE_DB.PROBLEM p
+LEFT JOIN 
+    JUDGE_DB.TEST t ON p.id = t.Problem_id;
+
+

@@ -66,3 +66,47 @@ CREATE PROCEDURE get_problem_by_id(problem_id INT)
     END $$
 DELIMITER ;
 
+
+/*
+	CURD
+*/
+
+DROP PROCEDURE IF EXISTS sp_create_problem;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_create_problem(
+    IN p_name VARCHAR(225),
+    IN p_statement TEXT,
+    IN p_editorial TEXT,
+    IN p_time_limit_seconds INT,
+    IN p_memory_limit_mb INT,
+    IN p_problemsetter_handle VARCHAR(225),
+    IN p_test_input TEXT,
+    IN p_test_output TEXT
+)
+BEGIN
+    DECLARE last_problem_id INT;
+
+    INSERT INTO JUDGE_DB.PROBLEM (name, statement, editorial, time_limit_seconds, memory_limit_mb, problemsetter_handle)
+    VALUES (p_name, p_statement, p_editorial, p_time_limit_seconds, p_memory_limit_mb, p_problemsetter_handle);
+
+    SET last_problem_id = LAST_INSERT_ID();
+
+    INSERT INTO JUDGE_DB.TEST (number, Problem_id, input, output)
+    VALUES (1, last_problem_id, p_test_input, p_test_output);
+
+    SELECT last_problem_id AS problem_id;
+END $$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_read_problem_by_handle;
+DELIMITER $$
+
+CREATE PROCEDURE sp_read_problem_by_handle( IN user_handle VARCHAR(20))
+BEGIN
+    SELECT * FROM vw_problems WHERE problemsetter_handle = user_handle;
+END $$
+
+DELIMITER ;
