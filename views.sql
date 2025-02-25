@@ -20,21 +20,15 @@ CREATE VIEW vw_submission_activity
     
     
 /*
-	Shows all the information necesary for the problems page
-	(Acepted)
+	Shows all information necesary for submissions table in user page
 */
-DROP VIEW IF EXISTS vw_user_ac_submissions;
-CREATE VIEW vw_user_ac_submissions AS
-SELECT 
-    s.problem_id, 
-    s.id AS submission_id, 
-    s.code, 
-    s.execution_time_seconds, 
-    s.date, 
-    s.status, 
-    s.contestant_handle
+DROP VIEW IF EXISTS vw_user_submissions;
+CREATE VIEW vw_user_submissions AS
+SELECT s.id, s.problem_id, p.name AS problem_name, s.date, s.status, s.contestant_handle
 FROM JUDGE_DB.SUBMISSION s
-WHERE s.status = 'AC';
+JOIN JUDGE_DB.PROBLEM p ON s.problem_id = p.id; 
+
+
 
 
 /*

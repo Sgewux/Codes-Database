@@ -66,3 +66,4 @@ CREATE PROCEDURE get_problem_by_id(problem_id INT)
 		FROM problem WHERE id = problem_id;
     END $$
 DELIMITER ;
+
