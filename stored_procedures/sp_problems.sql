@@ -75,7 +75,6 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS sp_create_problem;
 
 DELIMITER $$
-
 CREATE PROCEDURE sp_create_problem(
     IN p_name VARCHAR(225),
     IN p_statement TEXT,
@@ -99,15 +98,45 @@ BEGIN
 
     SELECT last_problem_id AS problem_id;
 END $$
-
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS sp_read_problem_by_handle;
-DELIMITER $$
 
+
+DROP PROCEDURE IF EXISTS sp_read_problem_by_handle;
+
+DELIMITER $$
 CREATE PROCEDURE sp_read_problem_by_handle( IN user_handle VARCHAR(20))
 BEGIN
-    SELECT * FROM vw_problems WHERE problemsetter_handle = user_handle;
+    SELECT * FROM vw_problem_details_CRUD WHERE problemsetter_handle = user_handle;
 END $$
+DELIMITER ;
 
+
+
+DROP PROCEDURE IF EXISTS sp_update_problem;
+
+DELIMITER $$
+CREATE PROCEDURE sp_update_problem(
+    IN p_problem_id INT,
+    IN p_statement TEXT,
+    IN p_editorial TEXT
+)
+BEGIN
+    UPDATE JUDGE_DB.PROBLEM
+    SET 
+        statement = IFNULL(NULLIF(p_statement, ''), statement),
+        editorial = IFNULL(NULLIF(p_editorial, ''), editorial)
+    WHERE id = p_problem_id;
+END $$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_delete_problem;
+
+DELIMITER $$
+CREATE PROCEDURE sp_delete_problem(IN p_problem_id INT)
+BEGIN
+	DELETE FROM JUDGE_DB.TEST WHERE Problem_id = p_problem_id;
+    DELETE FROM JUDGE_DB.PROBLEM WHERE id = p_problem_id;
+END $$
 DELIMITER ;

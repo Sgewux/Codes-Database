@@ -28,11 +28,7 @@ SELECT s.id, s.problem_id, p.name AS problem_name, s.date, s.status, s.contestan
 FROM JUDGE_DB.SUBMISSION s
 JOIN JUDGE_DB.PROBLEM p ON s.problem_id = p.id; 
 
-<<<<<<< HEAD
-=======
 
-    
->>>>>>> 4580b0bcdeecb017171bfa8f080956c4367e6d6a
 -- -----------------------------------------------------
 -- Problems
 -- -----------------------------------------------------
@@ -66,12 +62,19 @@ SELECT p.id, p.name, p.problemsetter_handle AS author, p.editorial, IFNULL(times
 /*
 	Read for CRUD
 */  
-CREATE VIEW vw_problems AS
-SELECT p.id AS problem_id, p.name, p.statement, p.editorial, p.time_limit_seconds, p.memory_limit_mb, p.problemsetter_handle, t.input AS test_input,
-t.output AS test_output
+DROP VIEW IF EXISTS vw_problem_details_CRUD;
+CREATE OR REPLACE VIEW vw_problem_details_CRUD AS
+SELECT 
+    p.id AS problem_id,    
+    p.problemsetter_handle,
+    p.name AS problem_name,           
+    p.editorial AS problem_editorial,
+    COUNT(s.id) AS total_submissions,
+    SUM(CASE WHEN s.status = 'AC' THEN 1 ELSE 0 END) AS accepted_submissions 
 FROM 
     JUDGE_DB.PROBLEM p
 LEFT JOIN 
-    JUDGE_DB.TEST t ON p.id = t.Problem_id;
-
+    JUDGE_DB.SUBMISSION s ON p.id = s.problem_id 
+GROUP BY 
+    p.id, p.name, p.editorial; 
 
