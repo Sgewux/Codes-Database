@@ -169,6 +169,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 
 DROP USER IF EXISTS 'application'@'localhost';
-CREATE USER 'application'@'localhost' IDENTIFIED BY 'password';
+CREATE USER 'application'@'localhost' IDENTIFIED BY 'Str0ngP@ssword!';
 
 GRANT ALL ON  JUDGE_DB.* TO 'application'@'localhost';
