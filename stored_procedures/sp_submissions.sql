@@ -80,7 +80,7 @@ DELIMITER $$
 CREATE PROCEDURE get_submission_by_id(id INT)
 	BEGIN
 		SELECT 
-			submission.id, contestant_handle AS contestant, name AS problemName, status , 
+			submission.id, problem.id AS problemId, contestant_handle AS contestant, name AS problemName, status , 
 			execution_time_seconds AS executionTime, date, code
         
 		FROM submission
