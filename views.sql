@@ -95,4 +95,3 @@ LEFT JOIN
     JUDGE_DB.SUBMISSION s ON p.id = s.problem_id 
 GROUP BY 
     p.id, p.name, p.editorial; 
-

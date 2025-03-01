@@ -102,10 +102,10 @@ DELIMITER ;
 
 
 
-DROP PROCEDURE IF EXISTS sp_read_problem_by_handle;
+DROP PROCEDURE IF EXISTS sp_read_problem_by_problemsetter_handle;
 
 DELIMITER $$
-CREATE PROCEDURE sp_read_problem_by_handle( IN user_handle VARCHAR(20))
+CREATE PROCEDURE sp_read_problem_by_problemsetter_handle( IN user_handle VARCHAR(20))
 BEGIN
     SELECT * FROM vw_problem_details_CRUD WHERE problemsetter_handle = user_handle;
 END $$
