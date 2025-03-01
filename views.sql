@@ -18,6 +18,24 @@ CREATE VIEW vw_submission_activity
     GROUP BY contestant_handle, DATE(submission.date)
 	ORDER BY DATE(submission.date) ASC);
     
+
+/*
+	Shows all the information necesary for the problems page
+	(Acepted)
+*/
+DROP VIEW IF EXISTS vw_user_ac_submissions;
+CREATE VIEW vw_user_ac_submissions AS
+SELECT 
+    s.problem_id, 
+    s.id AS submission_id, 
+    s.code, 
+    s.execution_time_seconds, 
+    s.date, 
+    s.status, 
+    s.contestant_handle
+FROM JUDGE_DB.SUBMISSION s
+WHERE s.status = 'AC';
+    
     
 /*
 	Shows all information necesary for submissions table in user page
@@ -77,4 +95,3 @@ LEFT JOIN
     JUDGE_DB.SUBMISSION s ON p.id = s.problem_id 
 GROUP BY 
     p.id, p.name, p.editorial; 
-

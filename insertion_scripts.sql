@@ -76,6 +76,7 @@ INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('aarno1c');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('dcheesley1d');
 INSERT INTO JUDGE_DB.PROBLEMSETTER (handle) VALUES ('shollyero');
 
+
 -- -----------------------------------------------------
 -- Table JUDGE_DB.PROBLEM
 -- -----------------------------------------------------

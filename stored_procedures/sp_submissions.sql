@@ -30,12 +30,6 @@ BEGIN
     LIMIT limit_value OFFSET offset_value;
 END $$
 
-DELIMITER ;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 4580b0bcdeecb017171bfa8f080956c4367e6d6a
 /*
 
 */
