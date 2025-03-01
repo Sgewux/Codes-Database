@@ -30,6 +30,8 @@ BEGIN
     LIMIT limit_value OFFSET offset_value;
 END $$
 
+DELIMITER ;
+
 /*
 
 */
@@ -68,3 +70,22 @@ CREATE PROCEDURE get_submission_activity(handle VARCHAR(20), from_d DATE, to_d D
         ;
     END $$
 DELIMITER ;
+
+/* 
+
+*/
+DROP  PROCEDURE IF EXISTS get_submission_by_id;
+
+DELIMITER $$
+CREATE PROCEDURE get_submission_by_id(id INT)
+	BEGIN
+		SELECT 
+			submission.id, contestant_handle AS contestant, name AS problemName, status , 
+			execution_time_seconds AS executionTime, date, code
+        
+		FROM submission
+		INNER JOIN problem ON submission.problem_id = problem.id
+        WHERE submission.id = id;
+    END $$
+DELIMITER ;
+
