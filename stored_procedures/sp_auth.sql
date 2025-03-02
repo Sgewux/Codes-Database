@@ -16,12 +16,12 @@ CREATE PROCEDURE register_contestant(
 	IN p_last_name VARCHAR(45),
 	IN p_password VARCHAR(100)
 )
-	BEGIN
-		INSERT INTO JUDGE_DB.USER (handle, first_name, last_name, password)
-		VALUES (p_handle, p_first_name, p_last_name, p_password);
+BEGIN
+	INSERT INTO JUDGE_DB.USER (handle, first_name, last_name, password)
+	VALUES (p_handle, p_first_name, p_last_name, p_password);
         
-        INSERT INTO JUDGE_DB.CONTESTANT (handle) VALUES (p_handle);
-	END $$
+	INSERT INTO JUDGE_DB.CONTESTANT (handle) VALUES (p_handle);
+END $$
 DELIMITER ;
 
 

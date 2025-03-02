@@ -140,3 +140,32 @@ BEGIN
     DELETE FROM JUDGE_DB.PROBLEM WHERE id = p_problem_id;
 END $$
 DELIMITER ;
+
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_problem_tests;
+DELIMITER $$
+CREATE PROCEDURE get_problem_tests(IN p_problem_id INT)
+BEGIN
+    SELECT number, input, output
+    FROM JUDGE_DB.TEST
+    WHERE Problem_id = p_problem_id;
+END $$
+DELIMITER ;
+
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS get_problem_time_limit;
+DELIMITER $$
+CREATE PROCEDURE get_problem_time_limit(IN problem_id INT)
+BEGIN
+  SELECT time_limit_seconds 
+  FROM JUDGE_DB.PROBLEM 
+  WHERE id = problem_id;
+END $$
+DELIMITER ;
+
