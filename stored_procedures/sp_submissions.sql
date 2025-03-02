@@ -8,9 +8,7 @@ USE JUDGE_DB;
 
 */
 DROP PROCEDURE IF EXISTS get_user_submissions;
-
 DELIMITER $$
-
 CREATE PROCEDURE get_user_submissions(
     IN user_handle VARCHAR(255),
     IN filter ENUM('all', 'accepted', 'tried'),
@@ -29,16 +27,14 @@ BEGIN
     )
     LIMIT limit_value OFFSET offset_value;
 END $$
-
 DELIMITER ;
+
 
 /*
 
 */
-
 DROP PROCEDURE IF EXISTS count_user_submissions;
 DELIMITER $$
-
 CREATE PROCEDURE count_user_submissions(
     IN user_handle VARCHAR(255),
     IN filter ENUM('all', 'accepted', 'tried')
@@ -53,7 +49,6 @@ BEGIN
         OR (filter = 'tried' AND s.status != 'AC')
     );
 END $$
-
 DELIMITER ;
 
 	
@@ -61,7 +56,6 @@ DELIMITER ;
 
 */
 DROP PROCEDURE IF EXISTS get_submission_activity;
-
 DELIMITER $$
 CREATE PROCEDURE get_submission_activity(handle VARCHAR(20), from_d DATE, to_d DATE)
 	BEGIN
@@ -71,11 +65,11 @@ CREATE PROCEDURE get_submission_activity(handle VARCHAR(20), from_d DATE, to_d D
     END $$
 DELIMITER ;
 
+
 /* 
 
 */
-DROP  PROCEDURE IF EXISTS get_submission_by_id;
-
+DROP PROCEDURE IF EXISTS get_submission_by_id;
 DELIMITER $$
 CREATE PROCEDURE get_submission_by_id(id INT)
 	BEGIN
@@ -89,3 +83,42 @@ CREATE PROCEDURE get_submission_by_id(id INT)
     END $$
 DELIMITER ;
 
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS create_submission;
+DELIMITER $$
+CREATE PROCEDURE create_submission(
+    IN p_contestant_handle VARCHAR(20),
+    IN p_problem_id INT,
+    IN p_code TEXT
+)
+BEGIN
+    INSERT INTO JUDGE_DB.SUBMISSION (
+        status, execution_time_seconds, date, code, problem_id, contestant_handle
+    ) VALUES (
+        'QU', 0.000, NOW(), p_code, p_problem_id, p_contestant_handle
+    );
+    SELECT LAST_INSERT_ID() AS submission_id;
+END $$
+DELIMITER ;
+
+
+/*
+
+*/
+DROP PROCEDURE IF EXISTS update_submission_verdict;
+DELIMITER $$
+CREATE PROCEDURE update_submission_verdict(
+    IN p_submission_id INT,
+    IN p_new_status ENUM('QU', 'AC', 'WA', 'TL', 'RT', 'CE'),
+    IN p_execution_time_seconds FLOAT
+)
+BEGIN
+    UPDATE JUDGE_DB.SUBMISSION
+    SET status = p_new_status,
+        execution_time_seconds = p_execution_time_seconds
+    WHERE id = p_submission_id;
+END $$
+DELIMITER ;
