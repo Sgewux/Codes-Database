@@ -5,13 +5,24 @@ USE JUDGE_DB;
 -- -----------------------------------------------------
 
 /*
+    Retrieves problem details for a specific user, filtered by problem status.
 
+    Filters:
+    - 'all'       → Retrieves all problems.
+    - 'accepted'  → Retrieves problems the user has solved.
+    - 'tried'     → Retrieves problems the user has attempted but not solved.
+
+    Supports pagination using `lm` (limit) and `ofs` (offset).
 */
 DROP PROCEDURE IF EXISTS get_problem_details_for_user;
 DELIMITER $$
-CREATE PROCEDURE get_problem_details_for_user(handle VARCHAR(20), filt ENUM('all', 'accepted', 'tried'), lm INT, ofS INT)
-	BEGIN
-
+CREATE PROCEDURE get_problem_details_for_user(
+    handle VARCHAR(20), 
+    filt ENUM('all', 'accepted', 'tried'), 
+    lm INT, 
+    ofS INT
+)
+BEGIN
     IF filt = 'all' THEN
 		SELECT COUNT(*) AS records FROM vw_problem_details;
         
@@ -34,48 +45,56 @@ CREATE PROCEDURE get_problem_details_for_user(handle VARCHAR(20), filt ENUM('all
         FROM vw_problem_details) as t1  WHERE status!='NT' AND status!='AC'
         LIMIT lm OFFSET ofs;  
 	END IF;
-    END $$
+END $$
 DELIMITER ;
 
 
 /*
+    Retrieves problem details based on the problem's name.
 
+    - Uses a prefix search (matches names starting with `p_name`).
+    - Includes the user's problem status.
+    - Supports pagination with `lm` (limit) and `ofs` (offset).
 */
 DROP PROCEDURE IF EXISTS get_problem_details_by_name;
 DELIMITER $$
 CREATE PROCEDURE get_problem_details_by_name(p_name VARCHAR(45), handle VARCHAR(20), lm INT, ofs INT)
-	BEGIN
-		SELECT COUNT(*) AS records FROM (SELECT id, name, author, editorial, times_solved, get_problem_status(id, handle) AS status
-        FROM vw_problem_details) as t1  WHERE name LIKE CONCAT(p_name, '%');
+BEGIN
+	SELECT COUNT(*) AS records FROM (SELECT id, name, author, editorial, times_solved, get_problem_status(id, handle) AS status
+    FROM vw_problem_details) as t1  WHERE name LIKE CONCAT(p_name, '%');
 		
-  		SELECT * FROM (SELECT id, name, author, editorial, times_solved, get_problem_status(id, handle) AS status
-        FROM vw_problem_details) as t1  WHERE name LIKE CONCAT(p_name, '%')
-        LIMIT lm OFFSET ofs;
-    END $$
+  	SELECT * FROM (SELECT id, name, author, editorial, times_solved, get_problem_status(id, handle) AS status
+    FROM vw_problem_details) as t1  WHERE name LIKE CONCAT(p_name, '%')
+    LIMIT lm OFFSET ofs;
+END $$
 DELIMITER ;
 
 
 /*
-
+    Retrieves detailed information about a problem using its unique ID.
 */
 DROP PROCEDURE IF EXISTS get_problem_by_id;
 DELIMITER $$
 CREATE PROCEDURE get_problem_by_id(problem_id INT)
-	BEGIN
-		SELECT id, name, problemsetter_handle AS 'author', time_limit_seconds AS 'timeLimitSeconds', statement, editorial
-		FROM problem WHERE id = problem_id;
-    END $$
+BEGIN
+	SELECT id, name, problemsetter_handle AS 'author', time_limit_seconds AS 'timeLimitSeconds', statement, editorial
+	FROM problem 
+    WHERE id = problem_id;
+END $$
 DELIMITER ;
 
 
 /*
-	CURD
+    Creates a new problem and inserts an initial test case.
+
+    - Stores problem details such as statement, editorial, and constraints.
+    - Assigns the problem to the specified problem setter.
+    - Inserts an initial test case into the `TEST` table.
+    - Returns the newly created problem ID.
 */
-
-DROP PROCEDURE IF EXISTS sp_create_problem;
-
+DROP PROCEDURE IF EXISTS create_problem;
 DELIMITER $$
-CREATE PROCEDURE sp_create_problem(
+CREATE PROCEDURE create_problem(
     IN p_name VARCHAR(225),
     IN p_statement TEXT,
     IN p_editorial TEXT,
@@ -101,22 +120,28 @@ END $$
 DELIMITER ;
 
 
-
-DROP PROCEDURE IF EXISTS sp_read_problem_by_problemsetter_handle;
-
+/*
+    Retrieves all problems created by a specific problem setter.
+*/
+DROP PROCEDURE IF EXISTS read_problem_by_problemsetter_handle;
 DELIMITER $$
-CREATE PROCEDURE sp_read_problem_by_problemsetter_handle( IN user_handle VARCHAR(20))
+CREATE PROCEDURE read_problem_by_problemsetter_handle(IN user_handle VARCHAR(20))
 BEGIN
-    SELECT * FROM vw_problem_details_CRUD WHERE problemsetter_handle = user_handle;
+    SELECT * 
+    FROM vw_problem_details_CRUD 
+    WHERE problemsetter_handle = user_handle;
 END $$
 DELIMITER ;
 
 
+/*
+    Updates an existing problem's statement or editorial.
 
-DROP PROCEDURE IF EXISTS sp_update_problem;
-
+    - If `p_statement` or `p_editorial` is empty, the existing value is retained.
+*/
+DROP PROCEDURE IF EXISTS update_problem;
 DELIMITER $$
-CREATE PROCEDURE sp_update_problem(
+CREATE PROCEDURE update_problem(
     IN p_problem_id INT,
     IN p_statement TEXT,
     IN p_editorial TEXT
@@ -131,10 +156,12 @@ END $$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS sp_delete_problem;
-
+/*
+    Deletes a problem and its associated test cases.
+*/
+DROP PROCEDURE IF EXISTS delete_problem;
 DELIMITER $$
-CREATE PROCEDURE sp_delete_problem(IN p_problem_id INT)
+CREATE PROCEDURE delete_problem(IN p_problem_id INT)
 BEGIN
 	DELETE FROM JUDGE_DB.TEST WHERE Problem_id = p_problem_id;
     DELETE FROM JUDGE_DB.PROBLEM WHERE id = p_problem_id;
@@ -143,7 +170,7 @@ DELIMITER ;
 
 
 /*
-
+    Retrieves all test cases associated with a specific problem.
 */
 DROP PROCEDURE IF EXISTS get_problem_tests;
 DELIMITER $$
@@ -157,15 +184,14 @@ DELIMITER ;
 
 
 /*
-
+    Retrieves the time limit (in seconds) for a specific problem.
 */
 DROP PROCEDURE IF EXISTS get_problem_time_limit;
 DELIMITER $$
 CREATE PROCEDURE get_problem_time_limit(IN problem_id INT)
 BEGIN
-  SELECT time_limit_seconds 
-  FROM JUDGE_DB.PROBLEM 
-  WHERE id = problem_id;
+    SELECT time_limit_seconds 
+    FROM JUDGE_DB.PROBLEM 
+    WHERE id = problem_id;
 END $$
 DELIMITER ;
-
