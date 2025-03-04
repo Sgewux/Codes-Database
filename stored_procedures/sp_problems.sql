@@ -101,8 +101,8 @@ CREATE PROCEDURE create_problem(
     IN p_time_limit_seconds INT,
     IN p_memory_limit_mb INT,
     IN p_problemsetter_handle VARCHAR(225),
-    IN p_test_input TEXT,
-    IN p_test_output TEXT
+    IN p_test_input LONGTEXT,
+    IN p_test_output LONGTEXT
 )
 BEGIN
     DECLARE last_problem_id INT;
@@ -143,8 +143,8 @@ DROP PROCEDURE IF EXISTS update_problem;
 DELIMITER $$
 CREATE PROCEDURE update_problem(
     IN p_problem_id INT,
-    IN p_statement TEXT,
-    IN p_editorial TEXT
+    IN p_statement LONGTEXT,
+    IN p_editorial LONGTEXT
 )
 BEGIN
     UPDATE JUDGE_DB.PROBLEM
