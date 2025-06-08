@@ -168,7 +168,7 @@ ENGINE = InnoDB;
 -- User definition
 -- -----------------------------------------------------
 
-DROP USER IF EXISTS 'application'@'localhost';
-CREATE USER 'application'@'localhost' IDENTIFIED BY 'Str0ngP@ssword!';
+DROP USER IF EXISTS 'application'@'%';
+CREATE USER 'application'@'%' IDENTIFIED BY 'Str0ngP@ssword!';
 
-GRANT ALL ON  JUDGE_DB.* TO 'application'@'localhost';
+GRANT ALL ON  JUDGE_DB.* TO 'application'@'%';
